@@ -1,0 +1,38 @@
+# Deep neural network
+import matplotlib.pyplot as plt
+import tensorflow as tf
+import numpy as np
+layers = tf.keras.layers
+
+from keras.datasets import fashion_mnist
+#loading the dataset
+(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
+#printing the shapes of the vectors 
+print('X_train: ' + str(x_train.shape))
+print('Y_train: ' + str(y_train.shape))
+print('X_test:  '  + str(x_test.shape))
+print('Y_test:  '  + str(x_test.shape))
+
+for i in range(1, 15):
+    # Create a 3x3 grid and place the
+    # image in ith position of grid
+    plt.subplot(5, 5, i)
+    # Insert ith image with the color map 'grap'
+    plt.imshow(x_train[i], cmap=plt.get_cmap('gray'))
+# Display the entire plot
+plt.show()
+
+model = tf.keras.Sequential()
+model.add(layers.Flatten())
+model.add(layers.Dense(64, activation='relu'))
+model.add(layers.Dense(64, activation='relu'))
+model.add(layers.Dense(10, activation='softmax'))
+
+model.compile(optimizer='adam',
+loss='sparse_categorical_crossentropy',
+metrics=['accuracy'])
+model.fit(x_train, y_train, epochs=10)
+
+test_loss, test_acc = model.evaluate(x_test, y_test)
+print('Test loss', test_loss)
+print('Test accuracy', test_acc)
